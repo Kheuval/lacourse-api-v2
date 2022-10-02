@@ -15,6 +15,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -31,8 +32,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Delete(security: 'object == user'),
         new Put(security: 'object == user')
     ],
-    normalizationContext: ['groups' => ['user:write']],
-    denormalizationContext: ['groups' => ['user:read']],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -41,7 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:read',
         'recipe:read'
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -83,13 +83,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'recipe:read',
         'recipe:write'
     ])]
-    private ArrayCollection $recipes;
+    private Collection $recipes;
 
     #[ORM\ManyToMany(targetEntity: Recipe::class), ORM\JoinTable(name: 'favorite_list')]
     #[Groups([
         'user:read',
     ])]
-    private ArrayCollection $favorites;
+    private Collection $favorites;
 
     #[ORM\OneToMany(
         mappedBy: 'user',
@@ -101,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'groceryList:read',
         'groceryList:write'
     ])]
-    private ArrayCollection $groceryLists;
+    private Collection $groceryLists;
 
     public function __construct()
     {

@@ -22,7 +22,6 @@ class ListDetail
         'listDetail:read',
         'groceryList:read',
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 10)]

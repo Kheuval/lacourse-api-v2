@@ -41,7 +41,6 @@ class Ingredient
         'groceryList:read',
         'ingredient:read',
     ])]
-    #[NotBlank]
     #[ApiProperty(writable: false)]
     private int $id;
 
@@ -67,7 +66,7 @@ class Ingredient
         cascade: ['persist'],
         orphanRemoval: true,
     )]
-    private ArrayCollection $recipeIngredients;
+    private Collection $recipeIngredients;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups([
@@ -85,7 +84,7 @@ class Ingredient
         cascade: ['persist'],
         orphanRemoval: true,
     )]
-    private ArrayCollection $listDetails;
+    private Collection $listDetails;
 
     public function __construct()
     {

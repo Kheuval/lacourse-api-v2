@@ -22,7 +22,6 @@ class Step
         'step:read',
         'step:write'
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'text')]

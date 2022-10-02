@@ -15,7 +15,6 @@ use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
@@ -56,7 +55,6 @@ class Image
     #[Groups([
         'image:read'
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]

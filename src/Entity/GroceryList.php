@@ -49,7 +49,6 @@ class GroceryList
         'groceryList:read',
         'user:read',
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 50)]
@@ -90,7 +89,7 @@ class GroceryList
         'ingredient:write',
 
     ])]
-    private ArrayCollection $listDetails;
+    private Collection $listDetails;
 
     public function __construct()
     {

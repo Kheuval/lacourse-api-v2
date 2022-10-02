@@ -21,7 +21,6 @@ class RecipeIngredient
     #[Groups([
         'recipeIngredient:read',
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 10)]

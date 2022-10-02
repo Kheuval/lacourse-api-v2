@@ -58,7 +58,6 @@ class Recipe
         'listDetail:read',
         'groceryList:read',
     ])]
-    #[NotBlank]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 50, unique: true)]
@@ -154,7 +153,7 @@ class Recipe
         'recipe:write',
         'ingredient:write'
     ])]
-    private ArrayCollection $recipeIngredients;
+    private Collection $recipeIngredients;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'recipes'), ORM\JoinColumn(nullable: true)]
     private User $user;
@@ -169,10 +168,10 @@ class Recipe
         'recipe:read',
         'recipe:write'
     ])]
-    private ArrayCollection $steps;
+    private Collection $steps;
 
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: ListDetail::class)]
-    private ArrayCollection $listDetails;
+    private Collection $listDetails;
 
     public function __construct()
     {
