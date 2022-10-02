@@ -1,6 +1,7 @@
 api_platform:
   swagger:
+    versions: [3]
     api_keys:
-      JWT:
+      token:
         name: Authorization
         type: header

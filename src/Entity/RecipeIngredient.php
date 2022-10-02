@@ -69,7 +69,7 @@ class RecipeIngredient
     #[Groups([
         'recipeIngredient:read',
         'ingredient:read',
-        'recipeIngredient:write',
+        'recipeIngredient:write'
     ])]
     #[NotBlank]
     private Recipe $recipe;

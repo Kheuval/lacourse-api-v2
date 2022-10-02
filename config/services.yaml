@@ -4,12 +4,31 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    acme_api.event.jwt_created_listener:
+        class: App\EventListener\JWTCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
     App\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@.inner' ]
+
+    App\StateProcessor\User\CreateUserProcessor:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\StateProcessor\User\UpdateUserProcessor:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\StateProcessor\GroceryList\CreateGroceryListProcessor:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.state.persist_processor'

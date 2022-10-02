@@ -12,10 +12,11 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
+use App\StateProcessor\User\CreateUserProcessor;
+use App\StateProcessor\User\UpdateUserProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -25,10 +26,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(),
+        new Post(
+            processor: CreateUserProcessor::class
+        ),
         new GetCollection(security: 'object == user'),
         new Get(security: 'object == user'),
-        new Patch(denormalizationContext: ['groups' => 'user:update'], security: 'object == user'),
+        new Patch(
+            denormalizationContext: ['groups' => 'user:update'],
+            security: 'object == user',
+            processor: UpdateUserProcessor::class
+        ),
         new Delete(security: 'object == user'),
         new Put(security: 'object == user')
     ],
@@ -68,7 +75,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[SerializedName('password')]
     #[Groups([
-        'user:write'
+        'user:write',
+        'user:update'
     ])]
     #[NotBlank]
     private ?string $plainPassword;

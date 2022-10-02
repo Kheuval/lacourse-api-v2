@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\GroceryListRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -15,6 +11,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Repository\GroceryListRepository;
+use App\StateProcessor\GroceryList\CreateGroceryListProcessor;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -24,7 +25,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(
             security: 'is_granted("ROLE_USER")',
         ),
-        new Post(),
+        new Post(
+            processor: CreateGroceryListProcessor::class,
+        ),
         new Get(
             security: 'object.getUser() == user',
         ),
@@ -73,7 +76,6 @@ class GroceryList
     private bool $isActive = true;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'groceryLists'), ORM\JoinColumn(nullable: false)]
-    #[NotBlank]
     private User $user;
 
     #[ORM\OneToMany(

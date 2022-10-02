@@ -73,7 +73,7 @@ class Recipe
     #[NotBlank]
     private string $name;
 
-    #[ORM\ManyToOne(targetEntity: Image::class, inversedBy: 'recipes'), ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Image::class), ORM\JoinColumn(nullable: false)]
     #[Groups([
         'recipeIngredient:read',
         'recipe:read',
