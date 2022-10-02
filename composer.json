@@ -29,7 +29,8 @@
         "symfony/serializer": "6.1.*",
         "symfony/twig-bundle": "6.1.*",
         "symfony/validator": "6.1.*",
-        "symfony/yaml": "6.1.*"
+        "symfony/yaml": "6.1.*",
+        "vich/uploader-bundle": "^1.21"
     },
     "config": {
         "allow-plugins": {
@@ -79,7 +80,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "6.1.*",
             "docker": false
         }
