@@ -236,14 +236,14 @@ class Recipe
         return $this;
     }
 
-    public function getPrepTime(): ?int
+    public function getPreparationTime(): ?int
     {
-        return $this->prepTime;
+        return $this->preparationTime;
     }
 
-    public function setPrepTime(?int $prepTime): self
+    public function setPreparationTime(?int $preparationTime): self
     {
-        $this->prepTime = $prepTime;
+        $this->preparationTime = $preparationTime;
 
         return $this;
     }
