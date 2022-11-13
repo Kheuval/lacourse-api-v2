@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\RecipeRepository;
+use App\StateProcessor\Recipe\CreateRecipeProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,7 +28,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(
             security: 'is_granted("ROLE_USER")',
         ),
-        new Post(),
+        new Post(
+            processor: CreateRecipeProcessor::class,
+        ),
         new Get(),
         new Patch(
             security: 'object.getUser() == user',
@@ -73,7 +76,7 @@ class Recipe
     #[NotBlank]
     private string $name;
 
-    #[ORM\ManyToOne(targetEntity: Image::class), ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class), ORM\JoinColumn(nullable: false)]
     #[Groups([
         'recipeIngredient:read',
         'recipe:read',
@@ -83,7 +86,7 @@ class Recipe
         'recipeIngredient:write',
         'recipe:write'
     ])]
-    private Image $image;
+    private ?MediaObject $image = null;
 
     #[ORM\Column(type: 'integer')]
     #[Groups([
@@ -197,12 +200,12 @@ class Recipe
         return $this;
     }
 
-    public function getImage(): ?Image
+    public function getImage(): ?MediaObject
     {
         return $this->image;
     }
 
-    public function setImage(Image $image): self
+    public function setImage(MediaObject $image): self
     {
         $this->image = $image;
 

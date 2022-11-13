@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Serializer;
 
-use App\Entity\Image;
+use App\Entity\MediaObject;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-final class ImageNormalizer implements NormalizerInterface, NormalizerAwareInterface
+final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
@@ -33,6 +33,6 @@ final class ImageNormalizer implements NormalizerInterface, NormalizerAwareInter
             return false;
         }
 
-        return $data instanceof Image;
+        return $data instanceof MediaObject;
     }
 }

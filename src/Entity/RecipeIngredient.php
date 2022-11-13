@@ -72,7 +72,7 @@ class RecipeIngredient
         'recipeIngredient:write'
     ])]
     #[NotBlank]
-    private Recipe $recipe;
+    private ?Recipe $recipe;
 
     public function getId(): ?int
     {

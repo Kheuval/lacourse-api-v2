@@ -10,19 +10,22 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Controller\CreateImageAction;
-use App\Repository\ImageRepository;
+use App\Controller\CreateMediaObjectAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: ImageRepository::class)]
+#[Vich\Uploadable]
+#[ORM\Entity]
 #[ApiResource(
+    types: ['https://schema.org/MediaObject'],
     operations: [
+        new Get(),
         new GetCollection(),
         new Post(
-            controller: CreateImageAction::class,
+            controller: CreateMediaObjectAction::class,
             openapiContext: [
                 'requestBody' => [
                     'content' => [
@@ -30,10 +33,9 @@ use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
                             'schema' => [
                                 'type' => 'object',
                                 'properties' => [
-                                    'image' => [
+                                    'file' => [
                                         'type' => 'string',
-                                        'format' => 'binary',
-                                        'description' => 'L\'image à télécharger'
+                                        'format' => 'binary'
                                     ]
                                 ]
                             ]
@@ -41,33 +43,28 @@ use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
                     ]
                 ]
             ],
-            security: 'is_granted("ROLE_USER")',
+            validationContext: ['groups' => ['Default', 'media_object_create']],
             deserialize: false
         ),
-        new Get(),
-        new Delete()
+        new Delete(),
     ],
-    normalizationContext: ['groups' => ['image:read']]
+    normalizationContext: ['groups' => ['media_object:read']]
 )]
-class Image
+class MediaObject
 {
-    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'image:read'
-    ])]
-    private int $id;
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
+    private ?int $id = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups([
-        'image:read'
-    ])]
+    #[Groups(['media_object:read'])]
     public ?string $contentUrl = null;
 
-    #[UploadableField(mapping: 'image', fileNameProperty: 'filePath')]
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
+    #[Assert\NotNull(groups: ['media_object_create'])]
     public ?File $file = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private string $filePath;
+    #[ORM\Column(nullable: true)]
+    public ?string $filePath = null;
 
     public function getId(): ?int
     {

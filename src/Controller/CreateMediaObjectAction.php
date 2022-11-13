@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Image;
+use App\Entity\MediaObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 #[AsController]
-final class CreateImageAction extends AbstractController
+final class CreateMediaObjectAction extends AbstractController
 {
-    public function __invoke(Request $request): Image
+    public function __invoke(Request $request): MediaObject
     {
         $uploadedFile = $request->files->get('file');
         if (!$uploadedFile) {
             throw new BadRequestHttpException('"file" is required');
         }
 
-        $image= new Image();
-        $image->file = $uploadedFile;
+        $mediaObject = new MediaObject();
+        $mediaObject->file = $uploadedFile;
 
-        return $image;
+        return $mediaObject;
     }
 }
