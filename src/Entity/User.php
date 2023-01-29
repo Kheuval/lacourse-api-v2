@@ -48,10 +48,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'user:read',
-        'recipe:read'
-    ])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -65,7 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Groups([
         'user:read',
-        'user:write'
+        'user:write',
+        'recipe:read'
     ])]
     #[NotBlank]
     private string $username;
@@ -91,7 +88,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Groups([
         'user:read',
-        'recipe:read',
         'recipe:write'
     ])]
     private Collection $recipes;

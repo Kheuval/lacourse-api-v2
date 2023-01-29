@@ -14,8 +14,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly UserRepository $userRepository,
+    )
     {
         parent::__construct($registry, Recipe::class);
+    }
+
+    public function getSample()
+    {
+        $user = $this->userRepository->find(1);
+
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :user')
+            ->orderBy('RAND()')
+            ->setMaxResults(5)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute()
+            ;
     }
 }

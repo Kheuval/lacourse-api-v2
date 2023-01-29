@@ -34,13 +34,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class Ingredient
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'recipeIngredient:read',
-        'listDetail:read',
-        'recipe:read',
-        'groceryList:read',
-        'ingredient:read',
-    ])]
     #[ApiProperty(writable: false)]
     private int $id;
 
@@ -56,7 +49,8 @@ class Ingredient
         'listDetail:write',
         'recipe:write',
         'groceryList:write',
-        'ingredient:write'
+        'ingredient:write',
+        'user:read',
     ])]
     private string $name;
 

@@ -47,11 +47,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class GroceryList
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'listDetail:read',
-        'groceryList:read',
-        'user:read',
-    ])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 50)]

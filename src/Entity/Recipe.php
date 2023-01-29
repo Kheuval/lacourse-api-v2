@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\RecipeSampleAction;
 use App\Repository\RecipeRepository;
 use App\StateProcessor\Recipe\CreateRecipeProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,6 +28,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     operations: [
         new GetCollection(
             security: 'is_granted("ROLE_USER")',
+        ),
+        new GetCollection(
+            uriTemplate: '/recipes/sample',
+            controller: RecipeSampleAction::class,
+            paginationEnabled: false,
+            security: "is_granted('ROLE_USER')",
+            read: false,
         ),
         new Post(
             processor: CreateRecipeProcessor::class,
@@ -53,14 +61,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class Recipe
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'recipeIngredient:read',
-        'recipe:read',
-        'ingredient:read',
-        'user:read',
-        'listDetail:read',
-        'groceryList:read',
-    ])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 50, unique: true)]
@@ -95,7 +95,8 @@ class Recipe
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     private int $servings = 0;
 
@@ -106,7 +107,8 @@ class Recipe
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     #[NotBlank]
     private int $totalTime;
@@ -118,7 +120,8 @@ class Recipe
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     private int $preparationTime = 0;
 
@@ -129,7 +132,8 @@ class Recipe
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     private int $restTime = 0;
 
@@ -140,7 +144,8 @@ class Recipe
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     private int $cookingTime = 0;
 
@@ -154,11 +159,15 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'recipe:write',
-        'ingredient:write'
+        'ingredient:write',
+        'user:read',
     ])]
     private Collection $recipeIngredients;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'recipes'), ORM\JoinColumn(nullable: true)]
+    #[Groups([
+        'recipe:read'
+    ])]
     private User $user;
 
     #[ORM\OneToMany(
@@ -169,7 +178,8 @@ class Recipe
     )]
     #[Groups([
         'recipe:read',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     private Collection $steps;
 

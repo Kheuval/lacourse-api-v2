@@ -18,9 +18,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class RecipeIngredient
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'recipeIngredient:read',
-    ])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 10)]
@@ -30,7 +27,8 @@ class RecipeIngredient
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     #[NotBlank]
     private string $unit;
@@ -42,7 +40,8 @@ class RecipeIngredient
         'ingredient:read',
         'ingredient:write',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     #[NotBlank]
     private float $quantity;
@@ -60,7 +59,8 @@ class RecipeIngredient
         'recipe:read',
         'ingredient:read',
         'recipeIngredient:write',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     #[NotBlank]
     private Ingredient $ingredient;

@@ -20,7 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ORM\Entity]
 #[ApiResource(
-    types: ['https://schema.org/MediaObject'],
+    types: ['MediaObject'],
     operations: [
         new Get(),
         new GetCollection(),

@@ -18,17 +18,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class Step
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    #[Groups([
-        'step:read',
-        'step:write'
-    ])]
     private int $id;
 
     #[ORM\Column(type: 'text')]
     #[Groups([
         'step:read',
         'recipe:read',
-        'recipe:write'
+        'recipe:write',
+        'user:read',
     ])]
     #[NotBlank]
     private string $stepDescription;
