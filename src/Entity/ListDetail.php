@@ -30,7 +30,7 @@ class ListDetail
         'groceryList:write'
     ])]
     #[NotBlank]
-    private string $unit;
+    private ?string $unit = null;
 
     #[ORM\Column(type: 'float')]
     #[Groups([
@@ -42,7 +42,7 @@ class ListDetail
         'groceryList:write'
     ])]
     #[NotBlank]
-    private float $quantity;
+    private ?float $quantity = null;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups([
@@ -62,7 +62,7 @@ class ListDetail
         'listDetail:write',
     ])]
     #[NotBlank]
-    private GroceryList $groceryList;
+    private ?GroceryList $groceryList = null;
 
     #[
         ORM\ManyToOne(targetEntity: Ingredient::class, cascade: ['persist'], inversedBy: 'listDetails'),
@@ -76,7 +76,7 @@ class ListDetail
         'groceryList:write'
     ])]
     #[NotBlank]
-    private Ingredient $ingredient;
+    private ?Ingredient $ingredient = null;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'listDetails')]
     #[Groups([

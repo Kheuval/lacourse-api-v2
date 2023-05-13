@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Put;
 use App\Controller\RecipeSampleAction;
 use App\Repository\RecipeRepository;
 use App\StateProcessor\Recipe\CreateRecipeProcessor;
+use App\StateProvider\RecipeProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +29,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     operations: [
         new GetCollection(
             security: 'is_granted("ROLE_USER")',
+            provider: RecipeProvider::class,
         ),
         new GetCollection(
             uriTemplate: '/recipes/sample',
@@ -42,6 +44,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Get(),
         new Patch(
             security: 'object.getUser() == user',
+            processor: CreateRecipeProcessor::class,
         ),
         new Delete(
             security: 'object.getUser() == user',
@@ -70,7 +73,6 @@ class Recipe
         'ingredient:read',
         'user:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write'
     ])]
     #[NotBlank]
@@ -83,7 +85,6 @@ class Recipe
         'ingredient:read',
         'user:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write'
     ])]
     private ?MediaObject $image = null;
@@ -94,7 +95,6 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write',
         'user:read',
     ])]
@@ -106,7 +106,6 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write',
         'user:read',
     ])]
@@ -119,7 +118,6 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write',
         'user:read',
     ])]
@@ -131,7 +129,6 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write',
         'user:read',
     ])]
@@ -143,7 +140,6 @@ class Recipe
         'recipe:read',
         'ingredient:read',
         'ingredient:write',
-        'recipeIngredient:write',
         'recipe:write',
         'user:read',
     ])]
@@ -166,7 +162,7 @@ class Recipe
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'recipes'), ORM\JoinColumn(nullable: true)]
     #[Groups([
-        'recipe:read'
+        'recipe:read',
     ])]
     private User $user;
 

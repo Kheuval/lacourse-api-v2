@@ -31,7 +31,7 @@ class RecipeIngredient
         'user:read',
     ])]
     #[NotBlank]
-    private string $unit;
+    private ?string $unit = null;
 
     #[ORM\Column(type: 'float')]
     #[Groups([
@@ -44,7 +44,7 @@ class RecipeIngredient
         'user:read',
     ])]
     #[NotBlank]
-    private float $quantity;
+    private ?float $quantity = null;
 
     #[
         ORM\ManyToOne(
@@ -63,7 +63,7 @@ class RecipeIngredient
         'user:read',
     ])]
     #[NotBlank]
-    private Ingredient $ingredient;
+    private ?Ingredient $ingredient = null;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'recipeIngredients')]
     #[Groups([
@@ -72,7 +72,7 @@ class RecipeIngredient
         'recipeIngredient:write'
     ])]
     #[NotBlank]
-    private ?Recipe $recipe;
+    private ?Recipe $recipe = null;
 
     public function getId(): ?int
     {
@@ -84,7 +84,7 @@ class RecipeIngredient
         return $this->unit;
     }
 
-    public function setUnit(string $unit): self
+    public function setUnit(?string $unit): self
     {
         $this->unit = $unit;
 
@@ -96,7 +96,7 @@ class RecipeIngredient
         return $this->quantity;
     }
 
-    public function setQuantity(float $quantity): self
+    public function setQuantity(?float $quantity): self
     {
         $this->quantity = $quantity;
 

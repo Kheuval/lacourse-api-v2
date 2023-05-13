@@ -52,7 +52,7 @@ class Ingredient
         'ingredient:write',
         'user:read',
     ])]
-    private string $name;
+    private ?string $name = null;
 
     #[ORM\OneToMany(
         mappedBy: 'ingredient',
@@ -70,7 +70,7 @@ class Ingredient
         'groceryList:write',
         'ingredient:read',
     ])]
-    private bool $isEdible;
+    private bool $isEdible = true;
 
     #[ORM\OneToMany(
         mappedBy: 'ingredient',

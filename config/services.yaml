@@ -1,4 +1,5 @@
 parameters:
+    app.front_url: '%env(APP_FRONT_URL)%'
 
 services:
     _defaults:
@@ -21,6 +22,10 @@ services:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@.inner' ]
 
+    App\Doctrine\Extension\CurrentUserExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+
     App\StateProcessor\User\CreateUserProcessor:
         bind:
             $decorated: '@api_platform.doctrine.orm.state.persist_processor'
@@ -36,3 +41,15 @@ services:
     App\StateProcessor\Recipe\CreateRecipeProcessor:
         bind:
             $decorated: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\StateProvider\RecipeProvider:
+        bind:
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+
+    App\StateProvider\GroceryListProvider:
+        bind:
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+
+    App\EventSubscriber\ForgotPasswordEventSubscriber:
+        arguments:
+            $frontUrl: '%app.front_url%'

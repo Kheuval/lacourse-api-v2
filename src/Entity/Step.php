@@ -28,11 +28,11 @@ class Step
         'user:read',
     ])]
     #[NotBlank]
-    private string $stepDescription;
+    private ?string $stepDescription = null;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'steps')]
     #[NotBlank]
-    private Recipe $recipe;
+    private ?Recipe $recipe = null;
 
     public function getId(): ?int
     {

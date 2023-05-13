@@ -11,9 +11,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\UserFavoritesAction;
 use App\Repository\UserRepository;
 use App\StateProcessor\User\CreateUserProcessor;
 use App\StateProcessor\User\UpdateUserProcessor;
+use App\StateProvider\UserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,11 +33,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             processor: CreateUserProcessor::class
         ),
         new GetCollection(security: 'object == user'),
+        new GetCollection(
+            uriTemplate: '/users/{id}/favorites',
+            controller: UserFavoritesAction::class,
+        ),
         new Get(security: 'object == user'),
         new Patch(
             denormalizationContext: ['groups' => 'user:update'],
             security: 'object == user',
-            processor: UpdateUserProcessor::class
+            forceEager: false,
+            processor: UpdateUserProcessor::class,
         ),
         new Delete(security: 'object == user'),
         new Put(security: 'object == user')
@@ -53,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Groups([
         'user:read',
-        'user:write'
+        'user:write',
     ])]
     #[NotBlank]
     private string $email;
@@ -62,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         'user:read',
         'user:write',
-        'recipe:read'
+        'recipe:read',
     ])]
     #[NotBlank]
     private string $username;
@@ -78,7 +85,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'user:write',
         'user:update'
     ])]
-    #[NotBlank]
     private ?string $plainPassword;
 
     #[ORM\OneToMany(
@@ -95,6 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Recipe::class), ORM\JoinTable(name: 'favorite_list')]
     #[Groups([
         'user:read',
+        'user:update'
     ])]
     private Collection $favorites;
 

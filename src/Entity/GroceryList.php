@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\GroceryListRepository;
 use App\StateProcessor\GroceryList\CreateGroceryListProcessor;
+use App\StateProvider\GroceryListProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     operations: [
         new GetCollection(
             security: 'is_granted("ROLE_USER")',
+            provider: GroceryListProvider::class,
         ),
         new Post(
             processor: CreateGroceryListProcessor::class,
@@ -33,6 +35,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         ),
         new Patch(
             security: 'object.getUser() == user',
+            processor: CreateGroceryListProcessor::class,
         ),
         new Delete(
             security: 'object.getUser() == user',

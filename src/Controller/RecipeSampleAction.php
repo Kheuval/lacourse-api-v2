@@ -15,7 +15,7 @@ final class RecipeSampleAction
 
     }
 
-    public function __invoke()
+    public function __invoke(): array
     {
         return $this->recipeRepository->getSample();
     }

@@ -11,15 +11,14 @@ use App\Repository\MediaObjectRepository;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Security\Core\Security;
 
 final class CreateRecipeProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ProcessorInterface    $decorated,
-        private readonly Security              $security,
-        private readonly IngredientRepository  $ingredientRepository,
+        private readonly ProcessorInterface $decorated,
+        private readonly Security $security,
+        private readonly IngredientRepository $ingredientRepository,
         private readonly MediaObjectRepository $imageRepository,
     ) {}
 
@@ -39,7 +38,7 @@ final class CreateRecipeProcessor implements ProcessorInterface
         foreach ($data->getRecipeIngredients() as $recipeIngredient) {
             $ingredient = $this->ingredientRepository->findOneBy(['name' => $recipeIngredient->getIngredient()->getName()]);
 
-            if ($ingredient !== null) {
+            if (null !== $ingredient) {
                 $data->removeRecipeIngredient($recipeIngredient);
                 $data->addRecipeIngredient($recipeIngredient->setIngredient($ingredient));
             } else {

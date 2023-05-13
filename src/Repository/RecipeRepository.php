@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Recipe|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,17 +23,45 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    public function getSample()
+    public function getSample(): array
     {
-        $user = $this->userRepository->find(1);
+        $adminUser = $this->userRepository->find(1);
+
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :adminUser')
+            ->orderBy('RAND()')
+            ->setMaxResults(5)
+            ->setParameter('adminUser', $adminUser)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    public function findAllForAdminUserOrCurrentUser(UserInterface $user): array
+    {
+        $adminUser = $this->userRepository->find(1);
 
         return $this->createQueryBuilder('r')
             ->andWhere('r.user = :user')
-            ->orderBy('RAND()')
-            ->setMaxResults(5)
-            ->setParameter('user', $user)
+            ->orWhere('r.user = :adminUser')
+            ->setParameters([
+                'user' => $user,
+                'adminUser' => $adminUser
+            ])
             ->getQuery()
             ->execute()
-            ;
+        ;
+    }
+
+    public function findAllForUser(UserInterface $user): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :user')
+            ->setParameters([
+                'user' => $user,
+            ])
+            ->getQuery()
+            ->execute()
+        ;
     }
 }
