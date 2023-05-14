@@ -26,5 +26,6 @@ security:
     access_control:
         - { path: ^/api, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/privacy-policy, roles: PUBLIC_ACCESS }
         - { path: ^/forgot_password/, role: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
