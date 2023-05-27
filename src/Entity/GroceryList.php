@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\GroceryListRepository;
 use App\StateProcessor\GroceryList\CreateGroceryListProcessor;
 use App\StateProvider\GroceryListProvider;
@@ -28,6 +27,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             provider: GroceryListProvider::class,
         ),
         new Post(
+            security: 'is_granted("ROLE_USER")',
             processor: CreateGroceryListProcessor::class,
         ),
         new Get(
@@ -40,9 +40,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Delete(
             security: 'object.getUser() == user',
         ),
-        new Put(
-            security: 'object.getUser() == user',
-        )
     ],
     normalizationContext: ['groups' => ['groceryList:read']],
     denormalizationContext: ['groups' => ['groceryList:write']],

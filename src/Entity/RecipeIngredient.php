@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\RecipeIngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -12,6 +14,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: RecipeIngredientRepository::class)]
 #[ApiResource(
+    operations: [
+        new Get(
+            controller: NotFoundAction::class,
+            output: false,
+            read: false
+        ),
+    ],
     normalizationContext: ['groups' => ['recipeIngredient:read']],
     denormalizationContext: ['groups' => ['recipeIngredient:write']],
 )]

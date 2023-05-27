@@ -5,17 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Controller\UserFavoritesAction;
 use App\Repository\UserRepository;
 use App\StateProcessor\User\CreateUserProcessor;
 use App\StateProcessor\User\UpdateUserProcessor;
-use App\StateProvider\UserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,20 +28,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Post(
             processor: CreateUserProcessor::class
         ),
-        new GetCollection(security: 'object == user'),
         new GetCollection(
             uriTemplate: '/users/{id}/favorites',
             controller: UserFavoritesAction::class,
         ),
-        new Get(security: 'object == user'),
         new Patch(
             denormalizationContext: ['groups' => 'user:update'],
             security: 'object == user',
             forceEager: false,
             processor: UpdateUserProcessor::class,
         ),
-        new Delete(security: 'object == user'),
-        new Put(security: 'object == user')
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],

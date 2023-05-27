@@ -6,9 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\CreateMediaObjectAction;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +21,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     types: ['MediaObject'],
     operations: [
         new Get(),
-        new GetCollection(),
         new Post(
             controller: CreateMediaObjectAction::class,
             openapiContext: [
@@ -43,10 +40,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                     ]
                 ]
             ],
+            security: 'is_granted("ROLE_USER")',
             validationContext: ['groups' => ['Default', 'media_object_create']],
             deserialize: false
         ),
-        new Delete(),
     ],
     normalizationContext: ['groups' => ['media_object:read']]
 )]

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\IngredientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +20,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 #[ApiResource(
+    operations: [
+    new GetCollection(
+        security: 'is_granted("ROLE_USER")',
+    ),
+],
     normalizationContext: ['groups' => ['ingredient:read']],
     denormalizationContext: ['groups' => ['ingredient:write']],
     paginationItemsPerPage: 7,

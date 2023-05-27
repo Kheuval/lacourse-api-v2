@@ -13,7 +13,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Controller\RecipeSampleAction;
 use App\Repository\RecipeRepository;
 use App\StateProcessor\Recipe\CreateRecipeProcessor;
@@ -39,9 +38,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             read: false,
         ),
         new Post(
+            security: "is_granted('ROLE_USER')",
             processor: CreateRecipeProcessor::class,
         ),
-        new Get(),
+        new Get(
+            security: "is_granted('ROLE_USER')",
+            provider: RecipeProvider::class,
+        ),
         new Patch(
             security: 'object.getUser() == user',
             processor: CreateRecipeProcessor::class,
@@ -49,9 +52,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Delete(
             security: 'object.getUser() == user',
         ),
-        new Put(
-            security: 'object.getUser() == user',
-        )
     ],
     normalizationContext: ['groups' => ['recipe:read']],
     denormalizationContext: ['groups' => ['recipe:write']],
