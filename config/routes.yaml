@@ -2,6 +2,11 @@ login:
     path: /login
     methods: ['POST']
 
+admin_login:
+    path: /admin-login
+    methods: ['POST']
+    controller: App\Controller\AdminAuthenticationAction
+
 privacy:
     path: /privacy-policy
     methods: ['GET']

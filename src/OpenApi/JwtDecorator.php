@@ -26,6 +26,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 ],
             ],
         ]);
+
         $schemas['Credentials'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
@@ -40,10 +41,38 @@ final class JwtDecorator implements OpenApiFactoryInterface
             ],
         ]);
 
+        $schemas['Invalid_credentials'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'code' => [
+                    'type' => 'number',
+                    'example' => '401',
+                ],
+                'message' => [
+                    'type' => 'string',
+                    'example' => 'Invalid credentials.',
+                ],
+            ],
+        ]);
+
+        $schemas['Forbidden'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'code' => [
+                    'type' => 'number',
+                    'example' => '403',
+                ],
+                'message' => [
+                    'type' => 'string',
+                    'example' => 'Forbidden.',
+                ],
+            ],
+        ]);
+
         $pathItem = new Model\PathItem(
             ref: 'JWT Token',
             post: new Model\Operation(
-                operationId: 'postCredentialsItem',
+                operationId: 'postCredentialsItemForUser',
                 tags: ['Token'],
                 responses: [
                     '200' => [
@@ -52,6 +81,16 @@ final class JwtDecorator implements OpenApiFactoryInterface
                             'application/json' => [
                                 'schema' => [
                                     '$ref' => '#/components/schemas/Token',
+                                ],
+                            ],
+                        ],
+                    ],
+                    '401' => [
+                        'description' => 'Invalid credentials',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Invalid_credentials',
                                 ],
                             ],
                         ],
@@ -71,7 +110,62 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 security: [],
             ),
         );
+
         $openApi->getPaths()->addPath('/login', $pathItem);
+
+        $pathItem = new Model\PathItem(
+            ref: 'JWT Token',
+            post: new Model\Operation(
+                operationId: 'postCredentialsItemForAdminuser',
+                tags: ['Token'],
+                responses: [
+                    '200' => [
+                        'description' => 'Get JWT token',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Token',
+                                ],
+                            ],
+                        ],
+                    ],
+                    '401' => [
+                        'description' => 'Invalid credentials',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Invalid_credentials',
+                                ],
+                            ],
+                        ],
+                    ],
+                    '403' => [
+                        'description' => 'Forbidden',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Forbidden',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                summary: 'Get JWT token to login.',
+                requestBody: new Model\RequestBody(
+                    description: 'Generate new JWT Token',
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/Credentials',
+                            ],
+                        ],
+                    ]),
+                ),
+                security: [],
+            ),
+        );
+
+        $openApi->getPaths()->addPath('/admin-login', $pathItem);
 
         return $openApi;
     }
