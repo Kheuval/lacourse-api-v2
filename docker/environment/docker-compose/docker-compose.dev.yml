@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    environment:
+      DOMAIN_NAME: ${DEFAULT_DOMAIN_NAME}
+    ports:
+      - 80
+      - 443
+
+  mailhog:
+    container_name: ${COMPOSE_PROJECT_NAME}_mailhog
+    image: mailhog/mailhog:latest
+    environment:
+      DOMAIN_NAME: mailhog.${DEFAULT_DOMAIN_NAME}
+
+  phpmyadmin:
+    container_name: ${COMPOSE_PROJECT_NAME}_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOSTS: mysql_symfony
+      PMA_USER: root
+      PMA_PASSWORD: ${SYMFONY_MYSQL_ROOT_PASSWORD}
+      PMA_ARBITRARY: 1
+      DOMAIN_NAME: pma.${DEV_DOMAIN_NAME}

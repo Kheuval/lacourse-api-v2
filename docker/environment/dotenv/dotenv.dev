@@ -1,0 +1,7 @@
+# environment/dotenv/.env.dev
+# DON'T STORE SENSITIVE INFORMATION HERE, USE .env.local INSTEAD
+
+DEV_DOMAIN_NAME=${PROJECT_DEV_DOMAIN_NAME}
+
+# Nginx
+NGINX_LOG_LEVEL=debug

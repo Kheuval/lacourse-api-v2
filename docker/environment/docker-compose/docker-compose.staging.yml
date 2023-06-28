@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    ports:
+      - ${PUBLIC_IP}:80:80
+      - ${PUBLIC_IP}:443:443
+
+  php_symfony:
+    deploy:
+      resources:
+        limits:
+          memory: "1000000000"
+
+  ssh:
+    volumes:
+      - ./mount/ssh/.ssh:${SSH_HOME}/.ssh
+      - ./mount/ssh/.bashrc:${SSH_HOME}/.bashrc
+      - ./mount/ssh/.profile:${SSH_HOME}/.profile
+    ports:
+      - ${PUBLIC_IP}:${SSH_PORT}:22
+
+  mailhog:
+    container_name: ${COMPOSE_PROJECT_NAME}_mailhog
+    image: mailhog/mailhog:latest
+
+  adminer:
+    container_name: ${COMPOSE_PROJECT_NAME}_adminer
+    image: adminer:latest

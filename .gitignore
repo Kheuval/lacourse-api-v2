@@ -1,12 +1,12 @@
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
+apps/api/.env.local
+apps/api/.env.local.php
+apps/api/.env.*.local
+apps/api/config/secrets/prod/prod.decrypt.private.php
+apps/api/public/bundles/
+apps/api/var/
+apps/api/vendor/
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+apps/api/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-/public/media/
+apps/api/public/media/

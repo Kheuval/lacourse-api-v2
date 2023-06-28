@@ -1,0 +1,5 @@
+PROJECT_NAME="lacourse"
+PROJECT_PUBLIC_NAME="LaCourse"
+ENVIRONMENTS="dev staging prod"
+BASE_REGISTRY_URL="rg.fr-par.scw.cloud/emagma"
+CONTAINER_REGISTRY_URL="rg.fr-par.scw.cloud"

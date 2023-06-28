@@ -1,0 +1,5 @@
+/build
+docker.lock
+/docker-compose.*
+/.env*
+/.project*

@@ -1,0 +1,1 @@
+FROM ${PROJECT_NAME}/nginx/${ENV}
