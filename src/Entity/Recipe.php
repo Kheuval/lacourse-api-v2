@@ -182,6 +182,13 @@ class Recipe
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: ListDetail::class)]
     private Collection $listDetails;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups([
+        'recipe:read',
+        'recipe:write',
+    ])]
+    private ?bool $verified = null;
+
     public function __construct()
     {
         $this->recipeIngredients = new ArrayCollection();
@@ -365,6 +372,18 @@ class Recipe
                 $listDetail->setRecipe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(?bool $verified): self
+    {
+        $this->verified = $verified;
 
         return $this;
     }
