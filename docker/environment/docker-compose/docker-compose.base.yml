@@ -58,7 +58,6 @@ services:
       - ./config/crontabs/crontab.${ENV}:/var/spool/cron/crontabs/${SSH_USER}
       - ./mount/apps/repo:${APPS_DIR}/repo
       - ./mount/apps/symfony:${APPS_DIR}/symfony
-      - ./mount/apps/frontend:${APPS_DIR}/frontend
       - ./mount/logs/:${APPS_DIR}/logs/
       - ./mount/wellknown/:${WELLKNOWN_DIR}
     environment:
