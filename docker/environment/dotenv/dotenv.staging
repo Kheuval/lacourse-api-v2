@@ -1,0 +1,5 @@
+# environment/dotenv/.env.staging
+# DON'T STORE SENSITIVE INFORMATION HERE, USE .env.private INSTEAD
+
+# Nginx
+NGINX_LOG_LEVEL=debug

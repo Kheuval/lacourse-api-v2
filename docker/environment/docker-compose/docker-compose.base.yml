@@ -1,0 +1,75 @@
+version: '3.7'
+
+services:
+  php_symfony:
+    container_name: ${COMPOSE_PROJECT_NAME}_php_symfony
+    build:
+      context: ./build/php/symfony
+    image: ${COMPOSE_PROJECT_NAME}/local/php/symfony
+    volumes:
+      - ./mount/logs/php/symfony/:/mnt/logs/
+      - ./mount/apps/symfony/:${APPS_DIR}/symfony/
+    environment:
+      APP_ENV: ${ENV}
+      DATABASE_URL: mysql://${SYMFONY_MYSQL_USER}:${SYMFONY_MYSQL_PASSWORD}@${SYMFONY_MYSQL_HOST}:${SYMFONY_MYSQL_PORT}/${SYMFONY_MYSQL_NAME}
+      SYMFONY_DB_HOST: ${SYMFONY_MYSQL_HOST}
+      SYMFONY_DB_PORT: ${SYMFONY_MYSQL_PORT}
+      SYMFONY_DB_NAME: ${SYMFONY_MYSQL_NAME}
+      SYMFONY_DB_USER: ${SYMFONY_MYSQL_USER}
+      SYMFONY_DB_PASSWORD: ${SYMFONY_MYSQL_PASSWORD}
+      MAILER_URL: ${SYMFONY_MAILER_URL}
+
+  mysql_symfony:
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql_symfony
+    build:
+      context: ./build/mysql/symfony
+    image: ${COMPOSE_PROJECT_NAME}/local/mysql/symfony
+    volumes:
+      - ./mount/mysql/symfony/data/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SYMFONY_MYSQL_ROOT_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${SYMFONY_MYSQL_ALLOW_EMPTY_PASSWORD}
+      MYSQL_DATABASE: ${SYMFONY_MYSQL_NAME}
+      MYSQL_USER: ${SYMFONY_MYSQL_USER}
+      MYSQL_PASSWORD: ${SYMFONY_MYSQL_PASSWORD}
+
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    build:
+      context: ./build/nginx/
+    image: ${COMPOSE_PROJECT_NAME}/local/nginx
+    volumes:
+      - ./config/nginx/dist/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/dist/conf.d/:/etc/nginx/conf.d/
+      - ./mount/certificates/:/apps/certificates/
+      - ./mount/logs/nginx/:/mnt/logs/
+      - ./mount/apps/symfony/:${APPS_DIR}/symfony/
+      - ./mount/wellknown/:${WELLKNOWN_DIR}
+
+  ssh:
+    container_name: ${COMPOSE_PROJECT_NAME}_ssh
+    build:
+      context: ./build/ssh/
+    image: ${COMPOSE_PROJECT_NAME}/local/ssh
+    hostname: ${ENV}
+    volumes:
+      - ./mount/ssh/home/:${SSH_HOME}/
+      - ./mount/certificates/:/apps/certificates/
+      - ./config/crontabs/crontab.${ENV}:/var/spool/cron/crontabs/${SSH_USER}
+      - ./mount/apps/repo:${APPS_DIR}/repo
+      - ./mount/apps/symfony:${APPS_DIR}/symfony
+      - ./mount/logs/:${APPS_DIR}/logs/
+      - ./mount/wellknown/:${WELLKNOWN_DIR}
+    environment:
+      APP_ENV: ${ENV}
+      DATABASE_URL: mysql://${SYMFONY_MYSQL_USER}:${SYMFONY_MYSQL_PASSWORD}@${SYMFONY_MYSQL_HOST}:${SYMFONY_MYSQL_PORT}/${SYMFONY_MYSQL_NAME}
+      SYMFONY_DB_HOST: ${SYMFONY_MYSQL_HOST}
+      SYMFONY_DB_PORT: ${SYMFONY_MYSQL_PORT}
+      SYMFONY_DB_NAME: ${SYMFONY_MYSQL_NAME}
+      SYMFONY_DB_USER: ${SYMFONY_MYSQL_USER}
+      SYMFONY_DB_PASSWORD: ${SYMFONY_MYSQL_PASSWORD}
+      MAILER_URL: ${SYMFONY_MAILER_URL}
+      SSH_UID: ${SSH_UID}
+      SSH_USER: ${SSH_USER}
+      SSH_HOME: ${SSH_HOME}
+    command: ["/opt/entrypoint.sh"]

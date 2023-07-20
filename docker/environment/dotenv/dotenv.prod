@@ -1,0 +1,2 @@
+# environment/dotenv/.env.prod
+# DON'T STORE SENSITIVE INFORMATION HERE, USE .env.private INSTEAD

@@ -1,12 +1,13 @@
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
+apps/symfony/.env.local
+apps/symfony/.env.local.php
+apps/symfony/.env.*.local
+apps/symfony/config/secrets/prod/prod.decrypt.private.php
+apps/symfony/public/bundles/
+apps/symfony/var/
+apps/symfony/vendor/
+apps/symfony/composer.phar
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+apps/symfony/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-/public/media/
+apps/symfony/public/media/

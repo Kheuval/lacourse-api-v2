@@ -1,0 +1,15 @@
+# environment/dotenv/.env.local
+# Keep local and sensitive values here
+
+# Network
+PUBLIC_IP=$("echo ${PUBLIC_IP:-0.0.0.0}")
+
+# Pureftpd
+PUREFTPD_PASSWORD=$("openssl rand -base64 64 | tr -dc 'a-zA-Z0-9+.=' | fold -w 32 | head -n 1")
+
+# Symfony
+SYMFONY_MYSQL_ROOT_PASSWORD=$("openssl rand -base64 64 | tr -dc 'a-zA-Z0-9+.=' | fold -w 32 | head -n 1")
+SYMFONY_MYSQL_PASSWORD=$("openssl rand -base64 64 | tr -dc 'a-zA-Z0-9+.=' | fold -w 32 | head -n 1")
+
+# Ssh
+SSH_PORT=$("echo ${SSH_PORT:-22}")

@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    ports:
+      - ${PUBLIC_IP}:80:80
+      - ${PUBLIC_IP}:443:443
+
+  ssh:
+    volumes:
+      - ./mount/ssh/.ssh:${SSH_HOME}/.ssh
+      - ./mount/ssh/.bashrc:${SSH_HOME}/.bashrc
+      - ./mount/ssh/.profile:${SSH_HOME}/.profile
+      - /var/spool/container-manage/${COMPOSE_PROJECT_NAME}:${SSH_HOME}/container-manage/
+    ports:
+      - ${PUBLIC_IP}:${SSH_PORT}:22
