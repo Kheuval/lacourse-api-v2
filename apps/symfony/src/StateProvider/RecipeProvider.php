@@ -30,6 +30,10 @@ final class RecipeProvider implements ProviderInterface
         $user = $this->security->getUser();
 
         if ($operation instanceof CollectionOperationInterface) {
+            if ($user->hasRole("ROLE_ADMIN")) {
+                return $this->recipeRepository->findAll();
+            }
+
             if (!array_key_exists('filters', $context)) {
                 return $this->recipeRepository->findAllForAdminUserOrCurrentUser($user);
             }
@@ -45,7 +49,7 @@ final class RecipeProvider implements ProviderInterface
         if ($operation instanceof Get) {
             $recipe = $this->recipeRepository->find($uriVariables['id']);
 
-            if ($user === $recipe->getUser() || $recipe->getUser()->getId() === 1) {
+            if ($user === $recipe->getUser() || $recipe->getUser()->hasRole("ROLE_ADMIN") || $user->hasRole("ROLE_ADMIN")) {
                 return $recipe;
             } else {
                 throw new AccessDeniedException();

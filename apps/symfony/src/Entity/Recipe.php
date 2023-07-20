@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\RecipePendingAction;
 use App\Controller\RecipeSampleAction;
 use App\Repository\RecipeRepository;
 use App\StateProcessor\Recipe\CreateRecipeProcessor;
@@ -37,6 +38,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             security: "is_granted('ROLE_USER')",
             read: false,
         ),
+        new GetCollection(
+            uriTemplate: '/recipes/pending',
+            controller: RecipePendingAction::class,
+            paginationEnabled: false,
+            security: "is_granted('ROLE_ADMIN')",
+            read: false,
+        ),
         new Post(
             security: "is_granted('ROLE_USER')",
             processor: CreateRecipeProcessor::class,
@@ -46,7 +54,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             provider: RecipeProvider::class,
         ),
         new Patch(
-            security: 'object.getUser() == user',
+            security: "object.getUser() == user || is_granted('ROLE_ADMIN')",
             processor: CreateRecipeProcessor::class,
         ),
         new Delete(

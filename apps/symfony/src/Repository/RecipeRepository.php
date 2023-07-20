@@ -64,4 +64,13 @@ class RecipeRepository extends ServiceEntityRepository
             ->execute()
         ;
     }
+
+    public function findAllPending(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.verified IS NULL')
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }
